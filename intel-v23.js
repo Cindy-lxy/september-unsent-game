@@ -36,7 +36,7 @@ function syncEventIntel() {
 function rabbitAvatar() {
   const image = el('img', 'rabbit-tab-avatar');
   image.src = $('rabbitPortrait').currentSrc || $('rabbitPortrait').src;
-  image.alt = '九月兔';
+  image.alt = tr('九月兔');
   return image;
 }
 
@@ -48,7 +48,7 @@ function stopIntelTyping() {
 
 function openIntel(id) {
   if (state.typing && !['intelArrival', 'intelReply'].includes(state.typing.kind)) {
-    toast('等对方这几句发完，再看九月兔的消息');
+    toast(tr('等对方这几句发完，再看九月兔的消息'));
     return;
   }
   stopIntelTyping();
@@ -66,8 +66,8 @@ function renderIntelAlert() {
   const unread = unreadIntel();
   if (!unread.length || (state.tab === 'chat' && state.rabbit)) return;
   const alert = button('', 'intel-alert', () => openIntel());
-  alert.append(rabbitAvatar(), el('span', '', '九月兔转来：' + unread[unread.length - 1].title), el('b', '', unread.length + ' 条未读 ↗'));
-  alert.setAttribute('aria-label', '查看九月兔新消息');
+  alert.append(rabbitAvatar(), el('span', '', tr('九月兔转来：') + unread[unread.length - 1].title), el('b', '', unread.length + tr(' 条未读 ↗')));
+  alert.setAttribute('aria-label', tr('查看九月兔新消息'));
   $('main').append(alert);
 }
 
@@ -87,9 +87,9 @@ function renderRabbitChat(main) {
 
   const layout = el('div', 'intel-layout');
   const archive = el('section', 'intel-archive');
-  archive.setAttribute('aria-label', '九月兔消息存档');
+  archive.setAttribute('aria-label', tr('九月兔消息存档'));
   const archiveTitle = el('div', 'intel-archive-title');
-  archiveTitle.append(el('strong', '', '校园来信'), el('span', '', items.length + ' 则已收到'));
+  archiveTitle.append(el('strong', '', tr('校园来信')), el('span', '', items.length + tr(' 则已收到')));
   archive.append(archiveTitle);
   const list = el('div', 'intel-list');
   items.forEach(x => {
@@ -97,7 +97,7 @@ function renderRabbitChat(main) {
     const card = button('', 'intel-item' + (x.id === item.id ? ' selected' : '') + (unseen ? ' unread' : ''), () => openIntel(x.id));
     card.dataset.intelItem = x.id;
     card.setAttribute('aria-pressed', String(x.id === item.id));
-    card.append(el('span', 'intel-item-meta', '0' + (x.ch + 1) + ' / ' + x.status), el('strong', '', x.title), el('span', 'intel-read-state', unseen ? '● 新消息' : '已读 · 可回看'));
+    card.append(el('span', 'intel-item-meta', '0' + (x.ch + 1) + ' / ' + x.status), el('strong', '', x.title), el('span', 'intel-read-state', unseen ? tr('● 新消息') : tr('已读 · 可回看')));
     list.append(card);
   });
   archive.append(list);
@@ -105,15 +105,15 @@ function renderRabbitChat(main) {
 
   const panel = el('section', 'chat-panel rabbit-panel');
   const header = el('div', 'chat-header');
-  header.append(rabbitAvatar(), el('strong', '', '九月兔'), el('span', '', '校园消息 · 剧情内转发'));
+  header.append(rabbitAvatar(), el('strong', '', tr('九月兔')), el('span', '', tr('校园消息 · 剧情内转发')));
   panel.append(header);
   const log = el('div', 'chat-log rabbit-log');
-  log.setAttribute('aria-label', '九月兔转发内容');
+  log.setAttribute('aria-label', tr('九月兔转发内容'));
   log.tabIndex = 0;
-  const rabbit = {name: '九月兔'};
+  const rabbit = {name: tr('九月兔')};
   const arrival = tp && tp.kind === 'intelArrival' && tp.intel === item.id;
   const replying = tp && tp.kind === 'intelReply' && tp.intel === item.id;
-  log.append(el('div', 'chat-date', '第 0' + (item.ch + 1) + ' 章 · ' + item.source));
+  log.append(el('div', 'chat-date', tr('第 0') + (item.ch + 1) + tr(' 章 · ') + item.source));
   if (arrival) {
     if (tp.revealed) bubble(log, item.lead, false, rabbit);
     else typingBubble(log, rabbit);
@@ -135,7 +135,7 @@ function renderRabbitChat(main) {
   panel.append(log);
   const composer = el('div', 'composer rabbit-composer');
   if (arrival || replying) {
-    composer.append(el('p', 'empty-small', '九月兔正在输入…'));
+    composer.append(el('p', 'empty-small', tr('九月兔正在输入…')));
   } else {
     if (!state.intelReplies[item.id] && item.kind !== 'background') {
       const ask = button(item.question, 'reply-choice intel-ask', () => {
@@ -149,15 +149,15 @@ function renderRabbitChat(main) {
     const actions = el('div', 'intel-actions');
     const pending = unreadIntel();
     const next = pending[0];
-    if (next) actions.append(button('下一条未读（' + pending.length + '）→', 'text-button', () => openIntel(next.id)));
+    if (next) actions.append(button(tr('下一条未读（') + pending.length + '）→', 'text-button', () => openIntel(next.id)));
     if (item.related) {
       const who = item.related;
-      const visit = button('和' + person(who).name + '聊聊 ↗', 'text-button', () => goChat(who));
+      const visit = button(tr('和') + person(who).name + tr('聊聊 ↗'), 'text-button', () => goChat(who));
       visit.dataset.intelRelated = who;
       actions.append(visit);
     }
-    actions.append(button('回到人物对话 →', 'text-button', () => goChat(state.who)));
-    composer.append(actions, el('p', 'intel-footnote', '聊到相关事情时，九月兔才会发来新消息。已收到的内容留在这里。'));
+    actions.append(button(tr('回到人物对话 →'), 'text-button', () => goChat(state.who)));
+    composer.append(actions, el('p', 'intel-footnote', tr('聊到相关事情时，九月兔才会发来新消息。已收到的内容留在这里。')));
   }
   panel.append(composer);
   layout.append(panel);

@@ -28,8 +28,8 @@ function epilogueDone(who) {
 }
 function epilogueCount() { return STORY.characters.filter(c => epilogueDone(c.id)).length; }
 function openEpilogue(who, mode = 'chat') {
-  if (!state.ending) { toast('先完成第三章的结局选择，再读他们后来的故事'); return; }
-  if (state.typing && !['epilogueIntro', 'epilogueStep'].includes(state.typing.kind)) { toast('等这几句消息发完，再去看后来的日子'); return; }
+  if (!state.ending) { toast(tr('先完成第三章的结局选择，再读他们后来的故事')); return; }
+  if (state.typing && !['epilogueIntro', 'epilogueStep'].includes(state.typing.kind)) { toast(tr('等这几句消息发完，再去看后来的日子')); return; }
   normalizeEpilogue(); hideToast();
   if (person(who)) state.epilogue.who = who;
   state.epilogue.mode = mode;
@@ -68,10 +68,10 @@ function renderEpilogue() {
   $('taskText').textContent = STORY.epilogue.objective;
   $('progressFill').style.width = ((epilogueCount() + e.read.length) / 8 * 100) + '%';
   $('stats').replaceChildren();
-  [['最后的私信', epilogueCount() + ' / 4'], ['结局日记', e.read.length + ' / 4']].forEach(([label, value]) => {
+  [[tr('最后的私信'), epilogueCount() + ' / 4'], [tr('结局日记'), e.read.length + ' / 4']].forEach(([label, value]) => {
     const d = el('div');d.append(el('strong', '', value),el('span','',label));$('stats').append(d);
   });
-  main.append(head('第四章 · 后来的日子', STORY.endings[state.ending].tag + ' · 四个人各自的后续'));
+  main.append(head(tr('第四章 · 后来的日子'), STORY.endings[state.ending].tag + tr(' · 四个人各自的后续')));
   const tabs = el('div', 'archive-tabs epilogue-archive');
   STORY.chapters.forEach((ch, i) => tabs.append(button('0' + (i+1) + ' ' + ch.title, '', () => {
     state.viewCh = i;state.entryClue = ch.entries[0].clue;setTab('diary');
@@ -81,12 +81,12 @@ function renderEpilogue() {
   STORY.characters.forEach(p => {
     const b = button('', 'contact ' + (p.id === c.id ? 'selected' : ''), () => openEpilogue(p.id, e.mode));
     b.dataset.epiloguePerson = p.id;
-    b.append(avatar(p), el('span', '', p.name), el('small', 'epilogue-status', e.read.includes(p.id) ? '已读结局' : epilogueDone(p.id) ? '新日记' : '最后的私信'));
+    b.append(avatar(p), el('span', '', p.name), el('small', 'epilogue-status', e.read.includes(p.id) ? tr('已读结局') : epilogueDone(p.id) ? tr('新日记') : tr('最后的私信')));
     contacts.append(b);
   });
   main.append(contacts);
   const modes = el('div', 'epilogue-modes');
-  [['chat','最后的私信'],['diary',epilogueDone(c.id)?'结局日记':'⌑ 结局日记']].forEach(([mode,label]) => {
+  [['chat',tr('最后的私信')],['diary',epilogueDone(c.id)?tr('结局日记'):tr('⌑ 结局日记')]].forEach(([mode,label]) => {
     const b=button(label,e.mode===mode?'selected':'',()=>openEpilogue(c.id,mode));b.dataset.epilogueMode=mode;modes.append(b);
   });
   main.append(modes);
@@ -94,7 +94,7 @@ function renderEpilogue() {
   else renderEpilogueDiary(main,c,data,variant);
   if(epilogueCount()===4 && e.read.length===4){
     const done=el('section','epilogue-complete');done.dataset.epilogueComplete='true';
-    done.append(el('div','eyebrow','SEPTEMBER, UNTIL NEXT TIME'),el('h3','','下次上线见'),el('p','',STORY.epilogue.completion));main.append(done);
+    done.append(el('div','eyebrow','SEPTEMBER, UNTIL NEXT TIME'),el('h3','',tr('下次上线见')),el('p','',STORY.epilogue.completion));main.append(done);
   }
 }
 function renderEpilogueChat(main,c,data,variant){
@@ -103,8 +103,8 @@ function renderEpilogueChat(main,c,data,variant){
   const intro=tp?.kind==='epilogueIntro'&&tp.who===c.id;
   const step=tp?.kind==='epilogueStep'&&tp.who===c.id;
   const panel=el('section','chat-panel epilogue-panel');
-  const header=el('div','chat-header');header.append(avatar(c),el('strong','',c.name),el('span','','异地 · 只聊近况，不再追问线索'));panel.append(header);
-  const log=el('div','chat-log epilogue-log');log.tabIndex=0;log.setAttribute('aria-label',c.name+'的最后私信');
+  const header=el('div','chat-header');header.append(avatar(c),el('strong','',c.name),el('span','',tr('异地 · 只聊近况，不再追问线索')));panel.append(header);
+  const log=el('div','chat-log epilogue-log');log.tabIndex=0;log.setAttribute('aria-label',c.name+tr('的最后私信'));
   log.append(el('div','chat-date',STORY.epilogue.date));
   if(intro){
     tp.messages.slice(0,tp.revealed).forEach(t=>bubble(log,t,false,c));
@@ -123,14 +123,14 @@ function renderEpilogueChat(main,c,data,variant){
   }
   panel.append(log);
   const composer=el('div','composer');
-  if(intro||step)composer.append(el('p','empty-small',c.name+' 正在输入…'));
+  if(intro||step)composer.append(el('p','empty-small',c.name+tr(' 正在输入…')));
   else if(epilogueDone(c.id)){
     const received=button('', 'received-diary',()=>openEpilogue(c.id,'diary'));received.dataset.epilogueDiary=c.id;
-    received.append(el('span','receipt-label','这次聊天之后 · '+c.name+' 的新日记'),el('strong','','▤ '+data.title),el('span','',variant.wordCount+' 字 · '+(e.read.includes(c.id)?'再次翻阅 ↗':'打开新日记 ↗')));
-    composer.append(el('p','empty-small','最后几句话留在了聊天框里。后来，生活又往前走了一点。'),received);
-    composer.append(button('再听听另一位的近况 →','text-button',()=>openEpilogue(nextEpiloguePerson(c.id),'chat')));
+    received.append(el('span','receipt-label',tr('这次聊天之后 · ')+c.name+tr(' 的新日记')),el('strong','','▤ '+data.title),el('span','',variant.wordCount+tr(' 字 · ')+(e.read.includes(c.id)?tr('再次翻阅 ↗'):tr('打开新日记 ↗'))));
+    composer.append(el('p','empty-small',tr('最后几句话留在了聊天框里。后来，生活又往前走了一点。')),received);
+    composer.append(button(tr('再听听另一位的近况 →'),'text-button',()=>openEpilogue(nextEpiloguePerson(c.id),'chat')));
   }else{
-    composer.append(el('div','composer-label','回复 '+c.name+' · '+(choices.length+1)+' / '+data.rounds.length));
+    composer.append(el('div','composer-label',tr('回复 ')+c.name+' · '+(choices.length+1)+' / '+data.rounds.length));
     data.rounds[choices.length].choices.forEach((text,choice)=>{
       const b=button(text,'reply-choice',()=>{
         if(state.typing)return;
@@ -149,29 +149,29 @@ function nextEpiloguePerson(who){
 function renderEpilogueDiary(main,c,data,variant){
   const paper=el('article','paper epilogue-paper');
   if(!epilogueDone(c.id)){
-    paper.classList.add('locked-paper');paper.append(el('div','eyebrow','CHAPTER 04 · '+c.name),el('div','lock-symbol','⌑'),el('h2','','这一页，写在告别之后'),el('p','lock-copy','先和'+c.name+'聊完最后一段私信，再翻开这篇新的日记。'),button('继续最后的私信 →','primary',()=>openEpilogue(c.id,'chat')));
+    paper.classList.add('locked-paper');paper.append(el('div','eyebrow','CHAPTER 04 · '+c.name),el('div','lock-symbol','⌑'),el('h2','',tr('这一页，写在告别之后')),el('p','lock-copy',tr('先和')+c.name+tr('聊完最后一段私信，再翻开这篇新的日记。')),button(tr('继续最后的私信 →'),'primary',()=>openEpilogue(c.id,'chat')));
     paper.dataset.epilogueLocked=c.id;main.append(paper);return;
   }
-  const top=el('div','paper-top');top.append(el('span','',c.name+' / 私人手记'),el('span','',data.weather+' · '+data.date));
-  paper.append(top,el('h2','',data.title),el('p','reading-meta',variant.wordCount+' 字 · 聊天之后写下的生活 · 私人记录'));
-  const reader=el('div','reading-body epilogue-reader');reader.tabIndex=0;reader.setAttribute('aria-label',c.name+'的结局日记');reader.dataset.epilogueReader=c.id;
+  const top=el('div','paper-top');top.append(el('span','',c.name+tr(' / 私人手记')),el('span','',data.weather+' · '+data.date));
+  paper.append(top,el('h2','',data.title),el('p','reading-meta',variant.wordCount+tr(' 字 · 聊天之后写下的生活 · 私人记录')));
+  const reader=el('div','reading-body epilogue-reader');reader.tabIndex=0;reader.setAttribute('aria-label',c.name+tr('的结局日记'));reader.dataset.epilogueReader=c.id;
   variant.text.forEach(text=>reader.append(el('p','diary-text',text)));paper.append(reader);
   const bottom=el('div','paper-bottom');
-  const label=el('span','',state.epilogue.read.includes(c.id)?'✓ 这篇结局日记已读':'读到页末，收好这一篇日记');bottom.append(label);
-  const mark=button(state.epilogue.read.includes(c.id)?'✓ 已读完这篇日记':'收好这篇结局日记 ✓','primary',()=>{
+  const label=el('span','',state.epilogue.read.includes(c.id)?tr('✓ 这篇结局日记已读'):tr('读到页末，收好这一篇日记'));bottom.append(label);
+  const mark=button(state.epilogue.read.includes(c.id)?tr('✓ 已读完这篇日记'):tr('收好这篇结局日记 ✓'),'primary',()=>{
     if(!epilogueDone(c.id))return;
     if(!state.epilogue.read.includes(c.id))state.epilogue.read.push(c.id);save();render();
   });mark.dataset.epilogueRead=c.id;bottom.append(mark);
   const update=()=>{mark.disabled=state.epilogue.read.includes(c.id)||reader.scrollTop+reader.clientHeight<reader.scrollHeight-24;};
   reader.addEventListener('scroll',()=>{state.epilogue.positions[c.id]=reader.scrollTop;update();save();},{passive:true});
-  bottom.append(button('回看和'+c.name+'的最后私信 →','text-button',()=>openEpilogue(c.id,'chat')));
-  if(state.epilogue.read.includes(c.id))bottom.append(button('继续看其他人的结局 →','text-button',()=>openEpilogue(nextEpiloguePerson(c.id),'chat')));
+  bottom.append(button(tr('回看和')+c.name+tr('的最后私信 →'),'text-button',()=>openEpilogue(c.id,'chat')));
+  if(state.epilogue.read.includes(c.id))bottom.append(button(tr('继续看其他人的结局 →'),'text-button',()=>openEpilogue(nextEpiloguePerson(c.id),'chat')));
   paper.append(bottom,el('div','page-number','— '+(25+STORY.characters.findIndex(p=>p.id===c.id))+' —'));main.append(paper);
   requestAnimationFrame(()=>{reader.scrollTop=state.epilogue.positions[c.id]||0;update();});
 }
 function finish() {
   if (!completed(2)) return;
-  dialog(STORY.ui.finalQuestion, ['事件原因不会随着选择改变。你选择的，是如何对待他们的心事。'],
+  dialog(STORY.ui.finalQuestion, [tr('事件原因不会随着选择改变。你选择的，是如何对待他们的心事。')],
     STORY.ui.finalChoices.map((text, i) => ({text, fn: () => {
       const score=Object.values(state.answers).filter(v=>v===0).length;
       const id=i===2||score<10?'distance':i===1||score<18?'quiet':'open';
@@ -182,6 +182,6 @@ function finish() {
 function showEnding(id=state.ending){
   if(!STORY.endings[id])return;
   const end=STORY.endings[id];
-  const actions=id===state.ending?[{text:'进入第四章 · '+STORY.epilogue.title+' →',fn:()=>{$('modal').close();openEpilogue();}}]:undefined;
-  dialog(end.title,[end.tag,...end.body,'已收藏此结局。第四章里，四个人还想各自和你聊一会儿；聊完后，可以读到他们新写的结局日记。'],actions);
+  const actions=id===state.ending?[{text:tr('进入第四章 · ')+STORY.epilogue.title+' →',fn:()=>{$('modal').close();openEpilogue();}}]:undefined;
+  dialog(end.title,[end.tag,...end.body,tr('已收藏此结局。第四章里，四个人还想各自和你聊一会儿；聊完后，可以读到他们新写的结局日记。')],actions);
 }

@@ -1,4 +1,4 @@
-const STORY = {
+const STORY_ZH = {
   "title": "未寄出的九月",
   "guide": {
     "name": "九月兔",
