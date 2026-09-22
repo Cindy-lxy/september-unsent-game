@@ -219,7 +219,7 @@ function dialog(title, paragraphs, actions) {
   box.append(el('div', 'eyebrow', 'SEPTEMBER ARCHIVE'), el('h2', '', title));
   paragraphs.forEach(t => box.append(el('p', '', t)));
   if (actions) actions.forEach(a => box.append(button(a.text, 'dialog-choice', a.fn)));
-  if (!$('modal').open) { $('modal').showModal(); $('modal').scrollTop = 0; }
+  if (!$('modal').open) { $('modal').showModal(); $('modalBody').scrollTop = 0; }
 }
 
 let guideStep = 0;
@@ -276,7 +276,7 @@ function showGuide() {
   minor.append(button('重新开始本轮故事', 'text-button', () => $('restart').click()));
   box.append(minor);
 
-  if (!$('modal').open) { $('modal').showModal(); $('modal').scrollTop = 0; }
+  if (!$('modal').open) { $('modal').showModal(); $('modalBody').scrollTop = 0; }
 }
 
 function help() {
