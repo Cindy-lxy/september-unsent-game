@@ -1,0 +1,56 @@
+/* 对方正在输入动画 */
+.message.typing p.typing-dots{display:inline-flex;align-items:center;gap:4px;min-width:38px;padding-bottom:2px}
+.typing-dots i{font-style:normal;font-weight:700;color:#7e8f76;line-height:0;animation:dotBlink 1.2s infinite ease-in-out}
+.typing-dots i:nth-child(2){animation-delay:.2s}
+.typing-dots i:nth-child(3){animation-delay:.4s}
+@keyframes dotBlink{0%,60%,100%{opacity:.2;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.message.typing p{min-height:22px}
+
+/* 长篇日记与逐篇解锁 */
+.diary-locked{background:linear-gradient(135deg,#e8ebe2,#dfe5d8);border-style:dashed;color:#8c9887;cursor:pointer}
+.diary-locked .entry-title,.diary-locked .entry-date{color:#879382}
+.locked-paper{min-height:560px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:48px 56px}
+.lock-symbol{font-size:44px;color:#a7b29a;margin:22px 0 4px}
+.lock-copy{font:15px/2.2 var(--serif);color:#74806f;max-width:430px;margin:12px 0 0}
+.lock-copy.secondary{font-size:12px;line-height:2;color:#99a190}
+.reading-meta{font-size:10px;letter-spacing:1.2px;color:#9aa18f;margin:0 0 18px}
+.reading-body{max-height:min(720px,72vh);overflow-y:auto;overflow-x:hidden;padding:4px 22px 8px 0;scrollbar-width:thin;scrollbar-color:#b8c3aa transparent;overscroll-behavior:contain}
+.memory-heading{font-size:12px;letter-spacing:2px;color:#71885f;border-left:3px solid #9aaf85;padding-left:10px;margin:28px 0 14px;font-weight:550}
+.reading-body>div.memory-heading:first-child{margin-top:4px}
+.reading-body h3.memory-heading{font:15px/1.7 var(--serif)}
+.reading-body .diary-text{margin:16px 0}
+.recall-action{border-color:#b3a98c;background:#fbf7ed}
+.received-diary{display:flex;flex-direction:column;gap:9px;text-align:left;border:1px solid #c7cdb9;border-left:3px solid #8a9c6e;background:#f8f5e9;padding:16px 18px;margin:15px 0 22px;width:min(340px,94%);line-height:1.7}
+.received-diary strong{font:17px/1.6 var(--serif);color:#465e45}.received-diary span{font-size:10px;color:#6a795f}.received-diary .receipt-label{font-size:9px;letter-spacing:1px;color:#87927b}
+@media(max-width:600px){.reading-body{max-height:62vh;padding-right:3px}.locked-paper{padding:34px 25px;min-height:420px}.received-diary{padding:13px 15px}.reading-meta{font-size:10px;line-height:1.8;letter-spacing:.4px}.paper-top{flex-wrap:wrap}}
+
+/* 九月兔引导 */
+.rabbit-bar{display:flex;align-items:center;gap:14px;margin:18px 0 0;padding:12px 16px;background:#eef1e3;border:1px solid #d5ddc8;border-left:3px solid #7f9b66}
+.rabbit-bar img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 2px 8px #24382f1c;flex:none}
+.rabbit-bar div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.rabbit-bar strong{font-family:var(--serif);font-size:13px;letter-spacing:1px;color:#3f5745}
+.rabbit-bar span{font-size:9px;color:#8b977f;letter-spacing:.5px}
+.rabbit-bar button{margin-left:auto;flex:none;background:#48654f;color:#f4f3e7;font-size:10px;letter-spacing:1px;padding:9px 14px;white-space:nowrap}
+
+.guide-hero{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.rabbit-guide{width:78px;height:78px;border-radius:50%;object-fit:cover;border:3px solid #e3ead4;box-shadow:0 3px 12px #2030251a;flex:none;background:#f3f1e8}
+.guide-hero h2{font:24px var(--serif);margin:3px 0 0;letter-spacing:2px}
+.guide-dots{display:flex;gap:6px;margin:6px 0 14px}
+.guide-dots span{width:18px;height:3px;background:#d8decf;border-radius:2px}
+.guide-dots span.on{background:#748f61}
+.guide-title{font:18px/1.6 var(--serif);margin:0 0 10px;color:#3a5142}
+.guide-p{font-size:13px;line-height:2;color:#61715c;margin:10px 0}
+.guide-actions{margin-top:18px}
+.guide-minor{display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid #e1e6d8}
+.guide-minor .text-button{font-size:10px;color:#8a9780}
+
+@media(max-width:600px){
+  .rabbit-bar{gap:10px;padding:10px 12px}
+  .rabbit-bar img{width:38px;height:38px}
+  .rabbit-bar strong{font-size:12px}
+  .rabbit-bar span{display:none}
+  .rabbit-bar button{padding:8px 10px;font-size:9px}
+  .rabbit-guide{width:62px;height:62px}
+  .guide-hero h2{font-size:21px}
+  .guide-p{font-size:12px;line-height:1.95}
+}

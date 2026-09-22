@@ -1,0 +1,19 @@
+.archive-tabs{flex-wrap:wrap;row-gap:8px}
+.epilogue-contacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.epilogue-contacts .contact{display:flex;flex-direction:column;min-width:0;padding:14px 6px;gap:8px}
+.epilogue-status{font-size:9px;color:#76876b;line-height:1.6;white-space:nowrap}
+.epilogue-modes{display:flex;gap:4px;padding:4px;background:#e6eadf;width:fit-content;margin:0 0 18px}
+.epilogue-modes button{padding:10px 19px;font-size:11px;color:#7b8972;min-height:40px}
+.epilogue-modes .selected{background:#fafaf4;color:#405b43;box-shadow:0 1px 4px #2636260c}
+.epilogue-panel{min-width:0}.epilogue-panel .chat-header{flex-wrap:wrap}
+.epilogue-log{height:380px;max-height:55vh;overflow-wrap:anywhere}
+.epilogue-panel .received-diary{width:100%;margin:14px 0}
+.epilogue-panel .composer>.text-button{display:block;margin-top:10px}
+.epilogue-paper{min-width:0}.epilogue-paper .paper-top{flex-wrap:wrap}
+.epilogue-reader{max-height:60vh;min-height:200px;overflow-y:auto;scrollbar-gutter:stable}
+.epilogue-paper .paper-bottom .primary{max-width:310px}
+.epilogue-complete{margin-top:24px;padding:28px;background:#e4eadb;border:1px solid #c7d2bb;text-align:center}
+.epilogue-complete .eyebrow{color:#879775;font-size:8px}
+.epilogue-complete h3{font:24px/1.6 var(--serif);letter-spacing:3px;margin:14px 0}
+.epilogue-complete p{font-size:12px;line-height:2;color:#738266;max-width:510px;margin:auto}
+@media(max-width:600px){.epilogue-contacts{gap:5px}.epilogue-contacts .contact{padding:11px 3px;font-size:10px}.epilogue-status{font-size:8px}.epilogue-modes{width:100%}.epilogue-modes button{flex:1;padding:10px 8px}.epilogue-panel .chat-header>span:last-child{flex-basis:100%;margin-left:0}.epilogue-log{height:340px;max-height:50vh}.epilogue-reader{max-height:55vh}.epilogue-complete{padding:24px 17px}.epilogue-paper .paper-bottom .primary{max-width:none}}
